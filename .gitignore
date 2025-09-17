@@ -4,3 +4,5 @@ coupons.json
 products.json
 tags.json
 categories.json
+practitioners.json
+node_modules
