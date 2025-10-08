@@ -14,10 +14,22 @@ async function readExcelFileNode(filePath) {
     const worksheet = workbook.Sheets[firstSheetName];
 
     // Convert worksheet to JSON
-    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+    const rawData = XLSX.utils.sheet_to_json(worksheet);
 
-    console.log(`Successfully read ${jsonData.length} rows from Excel file`);
-    return jsonData;
+    // Transform the data to the required format
+    const transformedData = rawData.map(item => {
+      const code = item.Code ? item.Code.toLowerCase() : '';
+      const email = item.Email ? item.Email.trim() : '';
+      
+      return {
+        code: code,
+        email: email,
+        description: `practitioner - ${email}`
+      };
+    });
+
+    console.log(`Successfully read ${transformedData.length} rows from Excel file`);
+    return transformedData;
   } catch (error) {
     console.error("Error reading Excel file:", error);
     return [];
@@ -50,7 +62,7 @@ async function processPractitioners(practitioners) {
   try {
     console.log("Starting to process practitioners.xlsx...");
 
-    // Read Excel file
+    // Read Excel file and transform data
     const practitioners = await readExcelFileNode("./practitioners.xlsx");
 
     if (practitioners.length === 0) {
