@@ -7,4 +7,4 @@ categories.json
 practitioners.json
 filtered-orders.json
 practitioners.xlsx
-node_modules
+**/node_modules
